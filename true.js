@@ -233,9 +233,50 @@ let regSeven =(data)=>{
         return "Kaco"
     }
     
-
-    
-    
-    
 }
 console.log(regSeven([6,22,8,33,10]))
+
+let posDominant =(data)=>{
+    let pos =[]
+    let neg =[]
+    let posNew =[]
+    
+    let sxf =data.filter((item,indx)=>data.indexOf(item)===indx)
+    for(i=0; i<sxf.length; i++){
+        if(sxf[i]>=0){
+            pos.push(sxf[i])
+        }else if (sxf[i]<=0){
+            neg.push(sxf[i])
+        }
+    }
+    if(pos.length > neg.length){
+        return "Positive Dominant than negative"
+    }else{
+        return "Negative more dominant than positive"
+    }
+}
+console.log(posDominant([1,1,1,-3,-4]))
+console.log(posDominant([17,-1,-1,-1,2,2]))
+
+panDigital =(num)=>{
+    let numStr = num.toString()
+    let legend =['0', '1','2','3','4','5','6','7','8','9']
+    for(i=0; i<numStr.length;i++){
+        if(!legend.includes(numStr[i])){
+            continue
+        }
+        legend.splice(legend.indexOf(numStr[i],1))
+    }
+    return !legend.length
+
+}
+console.log(panDigital(0987654321))
+
+// numOfOccur =(data)=>{
+//     console.log(data.length)
+//     for(i=0;i<data.length; i++){
+//         console.log(data[i])
+//     }
+// }
+
+// console.log(numOfOccur({a:"moron",b: "scumbag",c: "idiot", d: "idiot"}))
