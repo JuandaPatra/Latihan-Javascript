@@ -186,3 +186,56 @@ try {
 catch(error){
     console.log(error)
 }
+
+
+funs =(num)=>{
+    if(num >=0){
+        return true
+    }
+    else if (num <0){
+        return false
+    }
+}
+
+console.log(funs(-1))
+
+oddEven =(data)=>{
+    let resd = 0
+    // console.log(data)
+    let dat = Array.from(String(data), Number);
+    // console.log(dat)
+
+
+    for(i=0; i<dat.length; i++){
+        resd += dat[i]
+        // console.log(resd)
+    }
+    console.log(resd)
+    if(resd %2===0){
+        return "evenish"
+    }else if (resd %2===1){
+        return "oddish"
+    }
+    
+}
+console.log(oddEven(214))
+
+let regSeven =(data)=>{
+    let sazx=[]
+    for(i=0; i<data.length; i++){
+        let sz = /[7]/.test(data[i])
+        sazx.push(sz)
+    }
+    let vcv=sazx.filter(item => item === true)
+    if(vcv.length !==0){
+        return "Boom"
+    }else{
+        return "Kaco"
+    }
+    
+
+    
+    
+    
+}
+console.log(regSeven([6,22,8,33,10]))
