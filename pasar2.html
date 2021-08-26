@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Market V2.0</title>
+</head>
+<style>
+    table,
+    th,
+    td {
+        border: 1px solid black;
+        border-collapse: collapse;
+    }
+
+    #table-input input,
+    select {
+        margin: 5px;
+    }
+
+    #table-data {
+        width: 55%;
+    }
+
+    #table-cart {
+        width: 40%;
+    }
+</style>
+
+<body>
+    <center>
+        <h1>MARKET V2.0</h1>
+    </center>
+    <fieldset>
+        <legend>Filter</legend>
+        <label for="filter-nama">Nama: </label>
+        <input type="text" id="filter-nama" oninput="filterNama(this.value)">
+        <br><br>
+        <label>Harga: </label>
+        <input type="number" id="harga-1" oninput="filterHarga()">
+        <label> - </label>
+        <input type="number" id="harga-2" oninput="filterHarga()">
+        <br><br>
+        <label for="filter-cate">Kategori: </label>
+        <select id="filter-cate" onchange="filterKate()">
+            <option value="">All</option>
+            <option value="Fast Food">Fast Food</option>
+            <option value="Electronic">Electronic</option>
+            <option value="Cloth">Cloth</option>
+            <option value="Fruit">Fruit</option>
+        </select>
+        <br><br>
+        <button onclick="onReset()">Reset</button>
+    </fieldset>
+    <fieldset>
+        <legend>Input Data</legend>
+        <table id="table-input">
+            <tr>
+                <td>
+                    <input type="text" id="nama" placeholder="Nama">
+                </td>
+                <td>
+                    <input type="number" id="harga" placeholder="Harga">
+                </td>
+                <td>
+                    <select id="kate">
+                        <option value="">All</option>
+                        <option value="Fast Food">Fast Food</option>
+                        <option value="Electronic">Electronic</option>
+                        <option value="Cloth">Cloth</option>
+                        <option value="Fruit">Fruit</option>
+                    </select>
+                </td>
+                <td>
+                    <input type="number" id="stok" placeholder="Stok">
+                </td>
+            </tr>
+        </table>
+        <br>
+        <button onclick="inputData()">Input</button>
+    </fieldset>
+    <fieldset>
+        <legend>Table Data</legend>
+        <table id="table-data">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Kategori</th>
+                    <th>Nama</th>
+                    <th>Harga</th>
+                    <th>Stok</th>
+                    <th>Beli</th>
+                    <th colspan="2">Action</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </fieldset>
+    <fieldset>
+        <legend>Cart</legend>
+        <table id="table-cart">
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Kategori</th>
+                    <th>Nama</th>
+                    <th>Harga</th>
+                    <th>Qty</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+        <br>
+        <button onclick="onPayment()">Payment</button>
+    </fieldset>
+    <fieldset>
+        <legend>Payment</legend>
+        <h2>Transaction Detail</h2>
+        <div id="trans"></div>
+    </fieldset>
+</body>
+<script src="./database.js"></script>
+<script>
+    let showData = (data) => {
+        // get DOM access to tbody in table-data
+        let tbody = document.getElementById("table-data").tBodies[0]
+
+        let res = ''
+        data.forEach((item, index) => {
+            if (index === indexEdit) {
+                res += `
+            <tr>
+                <td><center>${item.id}</center></td>
+                <td><center>${item.kate}</center></td>
+                <td><input type="text" id="nama-edit" value="${item.nama}"></td>
+                <td><input type="number" id="harga-edit" value="${item.harga}" min="1"></td>
+                <td><input type="number" id="stok-edit" value="${item.stok}" min="1"></td>
+                <td><center><button onclick="onTambah(${index})" disabled>Tambah</button></center></td>
+                <td><button onclick="onSave(${index})" >Save</button></td>
+                <td><button onclick="onCancel()" >Cancel</button></td>
+            </tr>
+            `
+            } else {
+                res += `
+                <tr>
+                    <td><center>${item.id}</center></td>
+                    <td><center>${item.kate}</center></td>
+                    <td><center>${item.nama}</center></td>
+                    <td><center>${item.harga}</center></td>
+                    <td><center>${item.stok}</center></td>
+                    <td><center><button onclick="onTambah(${index})" id="tambah" >Tambah</button></center></td>
+                    <td><center><button onclick="onDelete(${index})" >Delete</button></center></td>
+                    <td><center><button onclick="onEdit(${index})" >Edit</button></center></td>
+                </tr>
+                `
+            }
+        })
+
+        tbody.innerHTML = res
+    }
+
+    showData(products)
+
+    let inputData = () => {
+        let nama = document.getElementById("nama").value
+        let harga = +document.getElementById("harga").value
+        let kate = document.getElementById("kate").value
+        let stok = +document.getElementById("stok").value
+        let id = Date.now()
+        // console.log(nama,harga,kate,stok,id)
+
+        products.push(new Product(id, kate, nama, harga, stok))
+        showData(products)
+    }
+</script>
+<script src="./filter.js"></script>
+<script>
+    let onEdit = (index) => {
+        indexEdit = index
+        showData(products)
+    }
+
+    let onCancel = () => {
+        indexEdit = null
+        showData(products)
+    }
+
+    let onDelete = (index) => {
+        products.splice(index, 1)
+        showData(products)
+    }
+
+    let onSave = (index) => {
+        let newNama = document.getElementById("nama-edit").value
+        let newHarga = document.getElementById("harga-edit").value
+        let newStok = document.getElementById("stok-edit").value
+        // let newId = Date.now()
+        products[index].nama = newNama
+        products[index].harga = newHarga
+        products[index].stok = newStok
+        // products[index].id = newId
+
+        indexEdit = null
+        showData(products)
+    }
+
+    let showCart = () => {
+        let tbody = document.getElementById("table-cart").tBodies[0]
+        console.log(tbody)
+        
+        let res = ''
+        cart.forEach((item, index) => {
+            res += `
+            <tr>
+                <td>${item.id}</td>
+                <td>${item.kate}</td>
+                <td>${item.nama}</td>
+                <td>${item.harga}</td>
+                <td>${item.qty}</td>
+                <td><button onclick="onDeleteCart(${index})" >Delete</button></td>
+            </tr>
+            `
+        })
+        tbody.innerHTML = res
+    }
+
+    let onTambah = (index) => {
+        let buyProduct = {...products[index]}
+
+        let ada
+        cart.forEach(item=>{
+            if(item.nama ===buyProduct.nama){
+                ada =1
+            }
+        })
+
+        if (ada==1){
+            cart.forEach(item=>{
+            if(item.nama ===buyProduct.nama){
+                let newNewStok =item.qty
+                newNewStok +=1
+                
+                console.log(item.stok)
+            }
+        })
+
+        }else{
+            buyProduct.qty = 1
+        // delete buyProduct.stok
+        console.log(buyProduct)
+
+        cart.push(buyProduct)
+        console.log(cart)
+
+        }
+
+        products[index].stok -= 1
+        products.forEach((item)=>{
+            if(products[index].stok===0){
+            alert('produk sudah tidak tersedia')
+            products[index].stok =0
+            document.getElementById("tambah").disabled=true
+            console.log(buyProduct[0].stok)
+            
+            return buttonObject[index].disabled
+        }else if(products[index].stok===-1){
+            alert('produk sudah tidak tersedia')
+            document.getElementById("tambah")[index].disabled=true
+            products[index].stok =0
+            // continue
+        }else{
+        
+        }
+        
+            
+        })
+        //     if(products[index].stok===0){
+        //     alert('produk sudah tidak tersedia')
+        //     products[index].stok =0
+        //     document.getElementById("tambah").disabled=true
+        //     console.log(buyProduct[0].stok)
+            
+        //     return buttonObject[index].disabled
+        // }else if(products[index].stok<=-1){
+        //     alert('produk sudah tidak tersedia')
+        //     document.getElementById("tambah")[index].disabled=false
+        //     products[index].stok =0
+        //     // continue
+        // }
+        
+            
+        // })
+        showData(products)
+        
+        
+
+        // cart.push(buyProduct)
+        console.log(cart)
+        showCart()
+    }
+
+    let onDeleteCart = (ind) => {
+        
+        cart.splice(ind, 1)
+        products.forEach(item=>{
+            let newNewStok =1
+           
+            item.stok += newNewStok
+            
+            
+        })
+        // console.log(item[0].stok)
+        console.log(products)
+        showData(products)
+        showCart()
+    }
+
+    let onPayment = () => {
+        let div = document.getElementById("trans")
+        
+        let res = ''
+        cart.forEach(item => {
+            let totalPerProduct = item.harga * item.qty
+            totalPrice += totalPerProduct
+
+            res += `
+            <p>${item.kate} | ${item.nama} | Rp ${item.harga} X ${item.qty} = Rp ${item.harga * item.qty}</p>
+            `
+        })
+        res += `<b>Sub Total : Rp ${totalPrice}</b><br><br>`
+        res += `<b>PPN : Rp ${totalPrice / 10}</b><br><br>`
+        res += `<b>Total : Rp ${totalPrice + (totalPrice / 10)}</b>`
+        div.innerHTML = res
+        // console.log(totalPrice)
+    }
+
+</script>
+
+</html>

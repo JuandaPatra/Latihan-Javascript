@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Fibonanci</title>
+    </head>
+    <body>
+        <h1>DERET FIBONANCI</h1>
+        <form>
+            <label for="numb">Masukan angka : </label>
+            <input type="number" id="numb" placeholder="masukan angka">
+        </form>
+        <br>
+
+        <button onclick="OnButtonShow()">SHOW</button>
+        <button onclick="OnButtonOdd()">GANJIL</button>
+        <button onclick="OnButtonEven()">GENAP</button>
+
+        <h1>RESULT : </h1>
+        <h1 id="output"></h1>
+    </body>
+    <script>
+        // get form
+        let numb = document.forms[0]["numb"]
+        let output = document.getElementById("output")
+
+        // calculate fibonanci
+        const fibonanci = n => {
+            // calculate fibonanci
+            let fib = [0, 1]
+            let i = 0
+            while (true) {
+                // check range
+                if (fib[i + 1] + fib[i] >= n) break
+                
+                // create fibonanci
+                fib.push(fib[i + 1] + fib[i])
+
+                // do increment
+                i++
+            }
+            // console.log(fib)
+
+            return fib
+        }
+
+        // show deret fibonanci
+        const OnButtonShow = () => {
+            // get numb value
+            let n = parseInt(numb.value)
+            console.log("n : ", n)
+
+            // claculate fibonanci
+            let fib = fibonanci(n)
+            console.log(fib)
+
+            // show output
+            output.textContent = `${fib.join(", ")}`
+        }
+
+        // sum of odd fibonanci
+        const OnButtonOdd = () => {
+            // get numb value
+            let n = parseInt(numb.value)
+            console.log("n : ", n)
+
+            // claculate fibonanci and filter odd
+            let odd = fibonanci(n).filter(item => item % 2 !== 0)
+            let sum = odd.reduce((a, b) => a + b)
+
+            // show output
+            output.textContent = `${odd.join(" + ")} = ${sum}`
+        }
+
+        // sum of even fibonanci
+        const OnButtonEven = () => {
+            // get numb value
+            let n = parseInt(numb.value)
+            console.log("n : ", n)
+
+            // claculate fibonanci and filter odd
+            let even = fibonanci(n).filter(item => item % 2 === 0)
+            let sum = even.reduce((a, b) => a + b)
+
+            // show output
+            output.textContent = `${even.join(" + ")} = ${sum}`
+        }
+    </script>
+</html>

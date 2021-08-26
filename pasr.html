@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <label id="Nama">Nama</label>
+    <input type="text" id="inputNama">
+    <button >Yes</button>
+    <button type="button" class="btn btn-primary" id="boots" onclick="tesBootsrap()">Input</button>
+    <br>
+
+    <table class="table" id="tabel">
+        <thead>
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">First</th>
+            <th scope="col">Last</th>
+            <th scope="col">Handle</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+</body>
+<script>
+    const db =[
+        {
+            name:"jos",
+            id : Date.now(),
+            pasword : "jos123"
+        }
+    ]
+
+    let editTabel = null
+
+    class Product {
+    constructor(name, id, password){
+        this.name = name,
+        this.id = id,
+        this.password = password
+    }
+}
+
+
+    let tesBootsrap=()=>{
+        let tekan = document.getElementById("boots")
+        console.log(5)
+
+        let name = document.getElementById("inputNama").value
+        console.log(name)
+        let id = 5
+        let password = Date.now()
+        db.push(new Product(name, id , password)) 
+        tes()
+
+
+    }
+    
+    let tes =()=>{
+        // let jaya = document.getElementById("inputNama").value
+        // console.log(jaya)
+
+        let tbl = document.getElementById("tabel").tBodies[0]
+        // console.log(tbl)
+
+        res =''
+        db.map((item,index)=>{
+          if(index+1 === editTabel){
+            res += `
+            <tr>
+            <td>${index+1}</td>
+            <td><input type="text" id="nama-edit" value="${item.name}"></td>
+            <td><input type="number" id="id-edit" value="${item.id}"></td>
+            <td>
+              <button type="button" class="btn btn-outline-success" onClick="onSave(${index})">Save</button>
+              <button type="button" class="btn btn-outline-danger" id="hapus" onClick="onCancel()">Cancel</button>
+              </td>
+          </tr>`
+          }
+          else{
+            // return 
+            res += `
+            <tr>
+            <td>${index+1}</td>
+            <td>${item.name}</td>
+            <td>${item.id}</td>
+            <td>
+              <button type="button" class="btn btn-outline-warning" id="edit" onClick="onEdit(${index+1})">Edit</button>
+              <button type="button" class="btn btn-outline-danger" id="hapus" onClick="onHapus(${index+1})">Delete</button>
+              </td>
+          </tr>`
+
+          }
+        })
+        
+        // console.log(tees)
+
+        tbl.innerHTML = res
+        
+
+        // let newDiv = document.createElement('div') // <div></div>
+        // newDiv.innerHTML = `
+        // ${tees}
+        // `
+        // document.getElementsByTagName('button')[0].after(newDiv)
+
+      }
+
+      tes()
+
+
+      let onHapus =(index)=>{
+        let hapus = document.getElementById("hapus")
+        console.log(hapus)
+        db.splice(index,1)
+        tes()
+      }
+
+      let onEdit =(index)=>{
+        // let edit = document.getElementById("edit")
+        // console.log(edit)
+        console.log(index)
+        editTabel = index
+        console.log(editTabel)
+          tes()
+
+      }
+
+      let onCancel =()=>{
+        editTabel =null
+        tes()
+      }
+
+      let onSave =(index)=>{
+        let editName = document.getElementById("nama-edit").value
+        let editid = document.getElementById("id-edit").value
+
+        db[index].name = editName
+        db[index].id = editid
+        editTabel = null
+        tes()
+
+
+
+      }
+  
+</script>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+</html>

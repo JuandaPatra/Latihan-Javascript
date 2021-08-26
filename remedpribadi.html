@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <p class="tulis" id="tulis"></p>
+    <input type="text" placeholder="Masukkan angka" id="text">
+    <button id="tekan" onclick="fibe()">Press</button>
+    <button id="tekanganjil" onclick="fibeganjil()">Ganjil</button>
+    <button id="tekangenap" onclick="fibegenap()">Genap</button>
+</body>
+
+<script>
+
+    let press = document.getElementById("tekan")
+    console.log(press)
+    
+    fibe =()=>{
+        let text = document.getElementById("text").value
+        fibonacci(text)
+    }
+
+fibonacci =(text)=>{
+    // console.log(text)
+    let bs =''
+    let a=0
+    let b=1
+    console.log(a)
+    // data.innerHTML=`${a}`
+    bs += ' '+ a +' ' 
+    while(b<text){
+        console.log(b)
+        // data.innerHTML=`${b}`
+        bs += ' '+ b + ' '
+        const c =b
+        b = a+b
+        a=c
+    }
+    data.innerHTML=`${bs}` 
+}
+    fibeganjil=()=>{
+        let text = document.getElementById("text").value
+        fibonacciGanjil(text)
+    }
+
+    fibonacciGanjil =(text)=>{
+    // console.log(text)
+    let bs = []
+    let a=0
+    let b=1
+    console.log(a)
+    bs.push(a)
+    // data.innerHTML=`${a}`
+    // bs += ' '+ a +' ' 
+    while(b<text){
+        bs.push(b)
+        console.log(b)
+        // data.innerHTML=`${b}`
+        // bs += ' '+ b + ' '
+        const c =b
+        b = a+b
+        a=c
+    }
+    console.log(bs)
+    // let dataganjil = bs.filter(item %2===0)
+    // console.log(dataganjil)
+    // ganjil(bs)
+    let dsg = bs.filter(item => item %2 ===1)
+    console.log(dsg)
+    // bs.filter(ganjil)
+    data.innerHTML=`${dsg}` 
+}
+
+    fibegenap=()=>{
+        let text = document.getElementById("text").value
+        fibonacciGenap(text)
+        
+    }
+
+    fibonacciGenap=(text)=>{
+    let bs = []
+    let a=0
+    let b=1
+    console.log(a)
+    bs.push(a)
+    // data.innerHTML=`${a}`
+    // bs += ' '+ a +' ' 
+    while(b<text){
+        bs.push(b)
+        console.log(b)
+        // data.innerHTML=`${b}`
+        // bs += ' '+ b + ' '
+        const c =b
+        b = a+b
+        a=c
+    }
+    console.log(bs)
+    // let dataganjil = bs.filter(item %2===0)
+    // console.log(dataganjil)
+    // ganjil(bs)
+    let dsgn = bs.filter(item => item %2 ===0)
+    console.log(dsgn)
+    let jumlah = 0
+    for (let i=0; i<dsgn.length; i++){
+        jumlah += dsgn[i]
+    }
+    console.log(jumlah)
+    // console.log(tambah)
+    // bs.filter(ganjil)
+    data.innerHTML=`${dsgn}` 
+
+    }
+
+let data = document.getElementById("tulis")
+data.innerHTML ="Tutorial javasctip "
+</script>
+</html>

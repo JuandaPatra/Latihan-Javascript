@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <input placeholder="username" id="username">
+    <input placeholder="email" id="email">
+    <label>role</label>
+    <select id="kate">
+        <option value="">All</option>
+        <option value="admin">admin</option>
+        <option value="user">user</option>
+    </select>
+    <button type="button" class="btn btn-primary" id="addUser" onclick="addUser()">ADD USER</button>
+    <br>
+
+    <h1>User</h1>
+
+    <table class="table" id="tabel">
+        <thead>
+          <tr>
+            <th scope="col">No</th>
+            <th scope="col">Username</th>
+            <th scope="col">Email</th>
+            <th scope="col">Role</th>
+            <th scope="col">Action</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+    
+</body>
+<script>
+    const db =[
+        {
+            username : "alee",
+            email : "alee@gmail.com",
+            role : "admin"
+        },
+        {
+            username : "jennie",
+            email : "jennie@gmail.com",
+            role : "user"
+        },
+        {
+            username : "elsa",
+            email : "elsa@gmail.com",
+            role : "user",
+        }
+    ]
+
+    let editIndex = null
+
+//     class User {
+//     constructor(username, email, role){
+//         this.username = username,
+//         this.email = email,
+//         this.role = role
+//     }
+// }   
+    class User{
+        constructor(username,email, role){
+            this.username = username,
+            this.email = email,
+            this.role = role
+        }
+
+    }
+    
+
+
+    
+    let data =()=>{
+        let tbl = document.getElementById("tabel").tBodies[0]
+        console.log(tbl)
+
+        let res = ''
+
+        db.map((item , index)=>{
+            if(editIndex === index){
+                res +=`
+            <tr>
+            <td><input type="text" id="namaedit" value="${item.username}"></td>
+            <td><input type="text" id="emailedit" value="${item.email}"></td>
+            <td><select id="editKate">
+        <option value="">All</option>
+        <option value="admin">admin</option>
+        <option value="user">user</option>
+    </select></td>
+            <td>
+              <button type="button" class="btn btn-outline-success" id="save"  onClick="onSave(${index})" >Save</button>
+              <button type="button" class="btn btn-outline-danger" id="cancel" onClick="onCancel()" >Cancel</button>
+              </td>
+          </tr>`
+
+            }else{
+
+                res +=`
+                <tr>
+                <td>${index}</td>
+                <td>${item.username}</td>
+                <td>${item.email}</td>
+                <td>${item.role}</td>
+                <td>
+                  <button type="button" class="btn btn-outline-success" id="edit" onClick="onEdit(${index})" >Edit</button>
+                  <button type="button" class="btn btn-outline-danger" id="hapus" onClick="onDelete(${index})" >Delete</button>
+                  </td>
+              </tr>`
+            }
+
+          
+          tbl.innerHTML = res
+        })
+    }
+
+    data()
+
+
+
+
+
+    
+    let addUser =()=>{
+        let username = document.getElementById("username").value
+        let email = document.getElementById("email").value
+        let role = document.getElementById("kate").value
+        db.push(new User(username, email, role))
+        console.log(username, email, role)
+        data()
+     }
+
+    let onEdit =(index)=>{
+        editIndex = index
+        console.log(index)
+        console.log(editIndex)
+        data()
+    }
+    let onCancel =()=>{
+        editIndex = null
+        console.log(editIndex)
+        data()
+    }
+
+    let onSave =(index)=>{
+        let newUsername = document.getElementById("namaedit").value
+        let newEmail = document.getElementById("emailedit").value
+        let newKate = document.getElementById("editKate").value
+
+        db[index].username = newUsername
+        db[index].email = newEmail
+        db[index].role = newKate
+        editIndex = null
+        data()
+
+        
+    }
+
+    let onDelete =(index)=>{
+        db.splice(index,1)
+        data()
+    }
+
+
+
+
+</script>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous">
+</html>
